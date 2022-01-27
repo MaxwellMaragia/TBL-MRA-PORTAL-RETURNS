@@ -2,7 +2,6 @@ package StepDefinitions;
 
 import Pages.*;
 import dataProvider.ConfigFileReader;
-import gherkin.lexer.Th;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -31,8 +30,13 @@ public class stepDefinitions extends BaseClass {
     FringeBenefit fringeBenefit = new FringeBenefit();
     NonResident nonResident = new NonResident();
     ProvisionalPit provisionalPit = new ProvisionalPit();
+    ProvisionalCIT provisionalCIT = new ProvisionalCIT();
     DomesticVat domesticVat = new DomesticVat();
     PAYE paye = new PAYE();
+    Pit pit = new Pit();
+    Cit cit = new Cit();
+    Dividend dividend = new Dividend();
+    Turnover turnover = new Turnover();
 
     @Given("Navigate to Portal login page")
     public void Navigate_to_Portal() {
@@ -607,6 +611,321 @@ public class stepDefinitions extends BaseClass {
     @Then("Submit Provisional Domestic Vat Tax returns")
     public void submitProvisionalDomesticVatTaxReturns() {
         domesticVat.getSubmitReturn().click();
+    }
+
+    @Then("Select PIT return with period {string}")
+    public void selectPITReturnWithPeriod(String period) throws InterruptedException {
+        implicitWait(3);
+        WebElement periodSelector = wait(30).until(ExpectedConditions.elementToBeClickable(By.xpath("//td[span='Personal Income Tax(PIT) Return']/preceding-sibling::td/preceding-sibling::td[span='"+period+"']//preceding-sibling::td/span//span")));
+        Thread.sleep(1000);
+        periodSelector.click();
+    }
+
+    @Then("Confirm information given for PIT tax is true")
+    public void confirmInformationGivenForPITTaxIsTrue() throws InterruptedException {
+        Thread.sleep(500);
+        wait(30).until(ExpectedConditions.visibilityOf(pit.getConfirmCheckbox()));
+        scrollIntoView(pit.getConfirmCheckbox());
+        pit.getConfirmCheckbox().click();
+    }
+
+    @Then("Submit PIT Tax returns")
+    public void submitPITTaxReturns() {
+        pit.getSubmitReturn().click();
+    }
+
+    @Then("Enter Business income as {string}")
+    public void enterBusinessIncomeAs(String arg0) {
+        wait(30).until(ExpectedConditions.visibilityOf(pit.getBusinessIncome()));
+        implicitWait(2);
+        scrollIntoView(pit.getBusinessIncome());
+        pit.getBusinessIncome().sendKeys(arg0);
+        implicitWait(1);
+    }
+
+    @Then("Enter Opening stock as {string}")
+    public void enterOpeningStockAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        pit.getOpeningStock().sendKeys(arg0);
+    }
+
+    @Then("Enter Purchases as {string}")
+    public void enterPurchasesAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        pit.getPurchases().sendKeys(arg0);
+    }
+
+    @Then("Enter Closing stock as {string}")
+    public void enterClosingStockAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        pit.getClosingStock().sendKeys(arg0);
+    }
+
+    @Then("Enter Salary and wages as {string}")
+    public void enterSalaryAndWagesAs(String arg0) {
+        wait(30).until(ExpectedConditions.visibilityOf(pit.getSalaryWages()));
+        implicitWait(2);
+        scrollIntoView(pit.getSalaryWages());
+        pit.getSalaryWages().sendKeys(arg0);
+        implicitWait(1);
+    }
+
+    @Then("Enter Opening capital as {string}")
+    public void enterOpeningCapitalAs(String arg0) {
+        wait(30).until(ExpectedConditions.visibilityOf(pit.getOpeningCapital()));
+        implicitWait(2);
+        scrollIntoView(pit.getOpeningCapital());
+        pit.getOpeningCapital().sendKeys(arg0);
+        implicitWait(1);
+    }
+
+    @Then("Enter Net profit as {string}")
+    public void enterNetProfitAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        pit.getNetProfit().sendKeys(arg0);
+    }
+
+    @Then("Enter Less drawings as {string}")
+    public void enterLessDrawingsAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        pit.getLessDrawings().sendKeys(arg0);
+    }
+
+    @Then("Upload dividend tax csv template")
+    public void uploadDividendTaxCsvTemplate() throws AWTException, InterruptedException {
+        wait(20).until(ExpectedConditions.visibilityOf(dividend.getUploadTemplate()));
+        scrollIntoView(dividend.getUploadTemplate());
+        String path = System.getProperty("user.dir") + File.separator + "src\\test\\resources\\Templates\\DIVIDEND" + File.separator + "Dividend_template.csv";
+        dividend.getUploadTemplate().click();
+        Thread.sleep(1000);
+        Robot rb = new Robot();
+
+        // copying File path to Clipboard
+        System.out.println("The path is : "+path);
+        StringSelection str = new StringSelection(path);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(str, null);
+        Thread.sleep(1000);
+
+        // press Contol+V for pasting
+        rb.keyPress(KeyEvent.VK_CONTROL);
+        rb.keyPress(KeyEvent.VK_V);
+        // release Contol+V for pasting
+        rb.keyRelease(KeyEvent.VK_CONTROL);
+        rb.keyRelease(KeyEvent.VK_V);
+        Thread.sleep(500);
+        // for pressing and releasing Enter
+        rb.keyPress(KeyEvent.VK_ENTER);
+        rb.keyRelease(KeyEvent.VK_ENTER);
+        Thread.sleep(600);
+    }
+
+    @Then("Enter dividend declaration date as today")
+    public void enterDividendDeclarationDateAsToday() {
+        dividend.getDeclarationDate().sendKeys(todaysDate("dd/MM/yyy"));
+        actionTab();
+    }
+
+    @Then("Confirm information given for Dividend tax is true")
+    public void confirmInformationGivenForDividendTaxIsTrue() throws InterruptedException {
+        Thread.sleep(500);
+        scrollIntoView(dividend.getConfirmCheckbox());
+        dividend.getConfirmCheckbox().click();
+    }
+
+    @Then("Submit Dividend Tax returns")
+    public void submitDividendTaxReturns() {
+        dividend.getSubmitReturn().click();
+    }
+
+    @Then("Select Provisional CIT with period {string}")
+    public void selectProvisionalCITWithPeriod(String arg0) throws InterruptedException {
+        implicitWait(3);
+        WebElement periodSelector = wait(30).until(ExpectedConditions.elementToBeClickable(By.xpath("//td[span='Provisional Tax(CIT) Return']/preceding-sibling::td/preceding-sibling::td[span='"+arg0+"']//preceding-sibling::td/span//span")));
+        Thread.sleep(1000);
+        periodSelector.click();
+    }
+
+    @Then("Enter estimated chargable income or loss for CIT as {string}")
+    public void enterEstimatedChargableIncomeOrLossForCITAs(String arg0) {
+        wait(30).until(ExpectedConditions.visibilityOf(provisionalCIT.getEstimatedIncome()));
+        implicitWait(2);
+        scrollIntoView(provisionalCIT.getEstimatedIncome());
+        provisionalCIT.getEstimatedIncome().sendKeys(arg0);
+        implicitWait(1);
+    }
+
+    @Then("Enter CIT quarter one Installment as {string}")
+    public void enterCITQuarterOneInstallmentAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        provisionalCIT.getQuarterOne().sendKeys(arg0);
+    }
+
+    @Then("Enter CIT quarter two Installment as {string}")
+    public void enterCITQuarterTwoInstallmentAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        provisionalCIT.getQuarterTwo().sendKeys(arg0);
+    }
+
+    @Then("Enter CIT quarter three Installment as {string}")
+    public void enterCITQuarterThreeInstallmentAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        provisionalCIT.getQuarterThree().sendKeys(arg0);
+    }
+
+    @Then("Enter CIT quarter four Installment as {string}")
+    public void enterCITQuarterFourInstallmentAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        provisionalCIT.getQuarterFour().sendKeys(arg0);
+    }
+
+    @Then("Confirm information given for Provisional CIT tax is true")
+    public void confirmInformationGivenForProvisionalCITTaxIsTrue() throws InterruptedException {
+        Thread.sleep(500);
+        wait(30).until(ExpectedConditions.visibilityOf(provisionalCIT.getConfirmCheckbox()));
+        scrollIntoView(provisionalCIT.getConfirmCheckbox());
+        provisionalCIT.getConfirmCheckbox().click();
+    }
+
+    @Then("Submit Provisional CIT Tax returns")
+    public void submitProvisionalCITTaxReturns() {
+        provisionalCIT.getSubmitReturn().click();
+    }
+
+    @Then("Select CIT return with period {string}")
+    public void selectCITReturnWithPeriod(String period) throws InterruptedException {
+        implicitWait(3);
+        WebElement periodSelector = wait(30).until(ExpectedConditions.elementToBeClickable(By.xpath("//td[span='Company Income Tax(CIT) Return']/preceding-sibling::td/preceding-sibling::td[span='"+period+"']//preceding-sibling::td/span//span")));
+        Thread.sleep(1000);
+        periodSelector.click();
+    }
+
+    @Then("Check corporate income checkbox")
+    public void checkCorporateIncomeCheckbox() {
+        wait(30).until(ExpectedConditions.visibilityOf(cit.getCorporateIncome()));
+        scrollIntoView(cit.getCorporateIncome());
+        cit.getCorporateIncome().click();
+    }
+
+    @Then("Enter CIT Business income as {string}")
+    public void enterCITBusinessIncomeAs(String arg0) {
+        wait(30).until(ExpectedConditions.visibilityOf(cit.getBusinessIncome()));
+        implicitWait(2);
+        scrollIntoView(cit.getBusinessIncome());
+        cit.getBusinessIncome().sendKeys(arg0);
+        implicitWait(1);
+    }
+
+    @Then("Enter CIT Opening stock as {string}")
+    public void enterCitOpeningStockAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        cit.getOpeningStock().sendKeys(arg0);
+    }
+
+    @Then("Enter CIT Purchases as {string}")
+    public void enterCitPurchasesAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        cit.getPurchases().sendKeys(arg0);
+    }
+
+    @Then("Enter CIT Closing stock as {string}")
+    public void enterCitClosingStockAs(String arg0) throws InterruptedException {
+        Thread.sleep(400);
+        cit.getClosingStock().sendKeys(arg0);
+    }
+
+    @Then("Enter CIT Salary and wages as {string}")
+    public void enterCitSalaryAndWagesAs(String arg0) {
+        wait(30).until(ExpectedConditions.visibilityOf(cit.getSalaryWages()));
+        implicitWait(2);
+        scrollIntoView(cit.getSalaryWages());
+        cit.getSalaryWages().sendKeys(arg0);
+        implicitWait(1);
+    }
+
+    @Then("Enter Share Capital as {string}")
+    public void enterShareCapitalAs(String arg0) {
+        wait(30).until(ExpectedConditions.visibilityOf(cit.getShareCapital()));
+        implicitWait(2);
+        scrollIntoView(cit.getShareCapital());
+        cit.getShareCapital().sendKeys(arg0);
+        implicitWait(1);
+    }
+
+    @Then("Upload directors pension fund information")
+    public void uploadDirectorsPensionFundInformation() throws InterruptedException, AWTException {
+        wait(20).until(ExpectedConditions.visibilityOf(cit.getCitUpload()));
+        scrollIntoView(cit.getCitUpload());
+        String path = System.getProperty("user.dir") + File.separator + "src\\test\\resources\\Templates\\CIT" + File.separator + "CITPENSIONFUND_Template.csv";
+        cit.getCitUpload().click();
+        Thread.sleep(1000);
+        Robot rb = new Robot();
+
+        // copying File path to Clipboard
+        System.out.println("The path is : "+path);
+        StringSelection str = new StringSelection(path);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(str, null);
+        Thread.sleep(1000);
+
+        // press Contol+V for pasting
+        rb.keyPress(KeyEvent.VK_CONTROL);
+        rb.keyPress(KeyEvent.VK_V);
+        // release Contol+V for pasting
+        rb.keyRelease(KeyEvent.VK_CONTROL);
+        rb.keyRelease(KeyEvent.VK_V);
+        Thread.sleep(500);
+        // for pressing and releasing Enter
+        rb.keyPress(KeyEvent.VK_ENTER);
+        rb.keyRelease(KeyEvent.VK_ENTER);
+        Thread.sleep(600);
+    }
+
+    @Then("Confirm information given for CIT tax is true")
+    public void confirmInformationGivenForCITTaxIsTrue() throws InterruptedException {
+        Thread.sleep(500);
+        wait(30).until(ExpectedConditions.visibilityOf(cit.getConfirmCheckbox()));
+        scrollIntoView(cit.getConfirmCheckbox());
+        cit.getConfirmCheckbox().click();
+    }
+
+    @Then("Submit CIT Tax returns")
+    public void submitCITTaxReturns() {
+        cit.getSubmitReturn().click();
+    }
+
+    @Then("Click new to add turnover details")
+    public void clickNewToAddTurnoverDetails() {
+        wait(30).until(ExpectedConditions.visibilityOf(turnover.getNew()));
+        scrollIntoView(turnover.getNew());
+        turnover.getNew().click();
+    }
+
+    @Then("Enter source of income as {string} description as {string} and amount as {string}")
+    public void enterSourceOfIncomeAsDescriptionAsAndAmountAs(String arg0, String arg1, String arg2) throws InterruptedException {
+        implicitWait(2);
+        turnover.getSourceOfIncome().sendKeys(arg0);
+        Thread.sleep(300);
+        turnover.getDescription().sendKeys(arg1);
+        Thread.sleep(300);
+        turnover.getAmount().sendKeys(arg2);
+        Thread.sleep(300);
+    }
+
+    @Then("Click add to save turnover details")
+    public void clickAddToSaveTurnoverDetails() {
+        turnover.getAddBtn().click();
+    }
+
+    @Then("Confirm information given for Turnover tax is true")
+    public void confirmInformationGivenForTurnoverTaxIsTrue() throws InterruptedException {
+        wait(30).until(ExpectedConditions.elementToBeClickable(turnover.getConfirmCheckbox()));
+        Thread.sleep(500);
+        scrollIntoView(turnover.getConfirmCheckbox());
+        turnover.getConfirmCheckbox().click();
+    }
+
+    @Then("Submit Turnover Tax returns")
+    public void submitTurnoverTaxReturns() {
+        turnover.getSubmitReturn().click();
     }
 }
 
