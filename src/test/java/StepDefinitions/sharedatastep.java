@@ -3,9 +3,6 @@ package StepDefinitions;
 
 
 public class sharedatastep {
-	public static String PatientFirstName;
-	public static String PatientLastName;
-	public static String ConsultantFirstName;
-	public static String ConsultantLastName;
-	public static String FacilityName;
+	public static int passed = 0;
+	public static int failed = 0;
 }

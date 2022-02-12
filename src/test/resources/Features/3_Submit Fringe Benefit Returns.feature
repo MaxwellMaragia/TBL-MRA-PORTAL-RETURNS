@@ -2,14 +2,14 @@ Feature: Verify the process of submitting Fringe Benefit Tax Returns
 
   Background: Navigate to login page and login
     Given Navigate to Portal login page
-    When Enter username "C0104499" and Password "Password@123"
+    When Enter username "C0105078" and Password "Password@123"
     And Click on login button
 
   @FringeBenefit
   Scenario: Submit Fringe Benefit Tax Returns
     Then Click on submit a return
     Then Select Taxtype as "Fringe Benefit Tax"
-    Then Select period as "2022/02"
+    Then Select period as "2022/01"
     Then Click continue to fill fringe benefit details
     Then Click new to add fringe benefit details
     Then Select fringe benefit as "Household Items"

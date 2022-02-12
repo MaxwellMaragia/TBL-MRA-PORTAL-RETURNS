@@ -2,14 +2,14 @@ Feature: Verify the process of submitting Company Income Tax Returns
 
   Background: Navigate to login page and login
     Given Navigate to Portal login page
-    When Enter username "V0104816" and Password "Password@123"
+    When Enter username "V0105100" and Password "Password@123"
     And Click on login button
 
   @CIT
   Scenario: Submit Company Income Tax Returns
     Then Click on submit a return
     Then Select Taxtype as "Company Income Tax"
-    Then Select CIT return with period "2021"
+    Then Select CIT return with period "2020"
     Then Click continue
     Then Check corporate income checkbox
     Then Click next

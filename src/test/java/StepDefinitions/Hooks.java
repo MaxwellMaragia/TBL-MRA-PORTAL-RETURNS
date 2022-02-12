@@ -21,6 +21,9 @@ public class Hooks extends BaseClass {
 	public Scenario scenario = null;
 	static ConfigFileReader reader;
 	static Properties pro;
+	public static File destPath;
+	public static String output;
+	public static String path;
 
 	@Before()
 	public void before(Scenario scenario) throws IOException {
@@ -50,10 +53,14 @@ public class Hooks extends BaseClass {
 
 		if(scenario.isFailed())
 		{
-			destPath=new File("./test-output/Screenshots/Failed/" + scenario.getName()+ strDate + ".png");
+			path = "./test-output/Screenshots/Failed/"+scenario.getName()+".png";
+			destPath=new File(path);
+			sharedatastep.failed++;
 		}
 		else{
-			destPath=new File("./test-output/Screenshots/Passed/" + scenario.getName()+ strDate + ".png");
+			path = "./test-output/Screenshots/Passed/"+scenario.getName()+".png";
+			destPath=new File(path);
+			sharedatastep.passed++;
 		}
 
 		try {
@@ -62,6 +69,6 @@ public class Hooks extends BaseClass {
 			e.printStackTrace();
 		}
 
-//		BaseClass.Closebrowser();
+		BaseClass.Closebrowser();
 	}
 }

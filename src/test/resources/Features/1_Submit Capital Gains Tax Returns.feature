@@ -2,7 +2,7 @@ Feature: Verify the process of submitting Capital Gains Tax Returns
 
   Background: Navigate to login page and login
     Given Navigate to Portal login page
-    When Enter username "C0104499" and Password "Password@123"
+    When Enter username "C0105078" and Password "Password@123"
     And Click on login button
 
   @CapitalGains

@@ -2,14 +2,14 @@ Feature: Verify the process of submitting Domestic Vat Tax Returns
 
   Background: Navigate to login page and login
     Given Navigate to Portal login page
-    When Enter username "C0104499" and Password "Password@123"
+    When Enter username "C0105078" and Password "Password@123"
     And Click on login button
 
   @DomesticVat
   Scenario: Submit Domestic Vat Tax Returns
     Then Click on submit a return
     Then Select Taxtype as "Domestic VAT"
-    Then Select period as "2022/03"
+    Then Select period as "2022/01"
     Then Click continue
     Then Enter value of sales as "67000"
     Then Enter Vat on imported services as "2000"

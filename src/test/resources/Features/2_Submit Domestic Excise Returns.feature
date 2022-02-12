@@ -2,14 +2,14 @@ Feature: Verify the process of submitting Domestic Excise Tax Returns
 
   Background: Navigate to login page and login
     Given Navigate to Portal login page
-    When Enter username "C0104499" and Password "Password@123"
+    When Enter username "V0105084" and Password "Password@123"
     And Click on login button
 
   @DomesticExcise
   Scenario: Submit Domestic Excise Tax Returns
     Then Click on submit a return
     Then Select Taxtype as "Domestic Excise"
-    Then Select period as "2022/02"
+    Then Select period as "2022/01"
     Then Click continue to upload domestic excise uploads
     Then Upload Transaction information on domestic excise tax computation on goods
     Then Verify alert success message "File uploaded successfully."
